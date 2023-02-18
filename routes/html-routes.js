@@ -6,15 +6,14 @@ router.get("/", async (req, res) => {
 	const [rows] = await db.query("SELECT * FROM inventory;");
 	const [[{ cartCount }]] = await db.query("SELECT SUM(quantity) AS cartCount FROM cart;");
 
-	// res.render("index", { rows, cartCount });
-	res.render(path.join(__dirname, "../views/index.html"));
+	res.render("index", { rows, cartCount });
 });
 
 router.get("/product/:id", async (req, res) => {
 	const [[product]] = await db.query("SELECT * FROM inventory WHERE id=?;", [req.params.id]);
 	const [[{ cartCount }]] = await db.query("SELECT SUM(quantity) AS cartCount FROM cart;");
-	res.render(path.join(__dirname, "../views/product.html"));
-	// res.render("product", { product, cartCount });
+
+	res.render("product", { product, cartCount });
 });
 
 router.get("/cart", async (req, res) => {
@@ -34,8 +33,7 @@ router.get("/cart", async (req, res) => {
 	// but let's just use some JavaScript instead.
 	const total = cartItems.reduce((total, item) => item.calculatedPrice + total, 0).toFixed(2);
 
-	// res.render("cart", { cartItems, total });
-	res.render(path.join(__dirname, "../views/cart.html"));
+	res.render("cart", { cartItems, total });
 });
 
 module.exports = router;
